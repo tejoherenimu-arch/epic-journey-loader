@@ -170,6 +170,14 @@
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .duration-600 {
+    transition-duration: 600ms;
+  }
 }
 
 @keyframes spin {
