@@ -7,6 +7,16 @@ import bhishmaImg from "@/assets/bhishma.png";
 import dronaImg from "@/assets/drona.png";
 import krishnaImg from "@/assets/krishna.png";
 import duryodhanaImg from "@/assets/duryodhana.png";
+import yudhishthiraImg from "@/assets/yudhishthira.png";
+import bhimaImg from "@/assets/bhima.png";
+import nakulaImg from "@/assets/nakula.png";
+import sahadevaImg from "@/assets/sahadeva.png";
+import abhimanyuImg from "@/assets/abhimanyu.png";
+import ashwatthamaImg from "@/assets/ashwatthama.png";
+import ghatotkachaImg from "@/assets/ghatotkacha.png";
+import dushasanaImg from "@/assets/dushasana.png";
+import shakuniImg from "@/assets/shakuni.png";
+import satyakiImg from "@/assets/satyaki.png";
 
 const characters: Character[] = [
   {
@@ -81,6 +91,126 @@ const characters: Character[] = [
     description: "The eldest Kaurava prince whose jealousy of the Pandavas ignited the great war. Despite his flaws, he was a formidable warrior and a loyal friend to Karna.",
     title: "The Crown Prince",
   },
+  {
+    id: "yudhishthira",
+    name: "Yudhishthira",
+    sanskritName: "युधिष्ठिर",
+    image: yudhishthiraImg,
+    birthplace: "Hastinapura",
+    strengths: ["Dharma (Righteousness)", "Truthfulness", "Wisdom", "Spear Combat"],
+    weaknesses: ["Gambling Addiction", "Over-reliance on Dharma", "Indecisiveness"],
+    parents: { father: "Yama (Dharmaraja)", mother: "Kunti" },
+    description: "The eldest Pandava and embodiment of Dharma. Known as Dharmaraja, his adherence to truth was legendary, yet his weakness for gambling led to the exile of his brothers.",
+    title: "The Righteous King",
+  },
+  {
+    id: "bhima",
+    name: "Bhima",
+    sanskritName: "भीम",
+    image: bhimaImg,
+    birthplace: "Hastinapura",
+    strengths: ["Immense Strength", "Mace Combat", "Fearlessness", "Appetite for Justice"],
+    weaknesses: ["Hot-Tempered", "Impulsive", "Pride in Strength"],
+    parents: { father: "Vayu (Wind God)", mother: "Kunti" },
+    description: "The second Pandava with the strength of ten thousand elephants. His vow to kill all hundred Kauravas and drink Dushasana's blood was fulfilled during the great war.",
+    title: "The Mighty",
+  },
+  {
+    id: "nakula",
+    name: "Nakula",
+    sanskritName: "नकुल",
+    image: nakulaImg,
+    birthplace: "Hastinapura",
+    strengths: ["Swordsmanship", "Horse Expertise", "Beauty", "Medicine"],
+    weaknesses: ["Vanity", "Over-confidence", "Dependent on Brothers"],
+    parents: { father: "Ashwini Kumaras", mother: "Madri" },
+    description: "The fourth Pandava and twin of Sahadeva, known as the most handsome man in the world. Expert in Ayurveda and horse training, he was skilled with the sword.",
+    title: "The Handsome",
+  },
+  {
+    id: "sahadeva",
+    name: "Sahadeva",
+    sanskritName: "सहदेव",
+    image: sahadevaImg,
+    birthplace: "Hastinapura",
+    strengths: ["Astrology", "Wisdom", "Cattle Knowledge", "Swordsmanship"],
+    weaknesses: ["Cursed Knowledge", "Introversion", "Self-doubt"],
+    parents: { father: "Ashwini Kumaras", mother: "Madri" },
+    description: "The youngest Pandava with the gift of seeing the future. Cursed that if he revealed prophecies, his head would shatter, he carried the burden of knowing the war's outcome.",
+    title: "The Wise",
+  },
+  {
+    id: "abhimanyu",
+    name: "Abhimanyu",
+    sanskritName: "अभिमन्यु",
+    image: abhimanyuImg,
+    birthplace: "Dwaraka",
+    strengths: ["Chakravyuha Entry", "Fearlessness", "Archery", "Youth & Vigor"],
+    weaknesses: ["Incomplete Knowledge", "Rashness", "Youth"],
+    parents: { father: "Arjuna", mother: "Subhadra" },
+    description: "The brave son of Arjuna who learned the secret of entering the Chakravyuha while in his mother's womb. His heroic death at sixteen remains one of the war's greatest tragedies.",
+    title: "The Young Hero",
+  },
+  {
+    id: "ashwatthama",
+    name: "Ashwatthama",
+    sanskritName: "अश्वत्थामा",
+    image: ashwatthamaImg,
+    birthplace: "Ashram of Drona",
+    strengths: ["Immortality", "Brahmastra", "Warfare Mastery", "Divine Gem"],
+    weaknesses: ["Rage", "Vengeance", "Cursed Existence"],
+    parents: { father: "Dronacharya", mother: "Kripi" },
+    description: "Born with a divine gem on his forehead, he was cursed by Krishna to wander the earth eternally for his war crimes. One of the seven Chiranjivi (immortals).",
+    title: "The Cursed Immortal",
+  },
+  {
+    id: "ghatotkacha",
+    name: "Ghatotkacha",
+    sanskritName: "घटोत्कच",
+    image: ghatotkachaImg,
+    birthplace: "Forest of Kamyaka",
+    strengths: ["Illusion Magic", "Flight", "Size Changing", "Night Fighting"],
+    weaknesses: ["Vulnerability to Divine Weapons", "Demonic Heritage"],
+    parents: { father: "Bhima", mother: "Hidimbi (Rakshasi)" },
+    description: "The half-demon son of Bhima whose magical powers wreaked havoc on the Kaurava army at night. His death by Shakti weapon saved Arjuna's life.",
+    title: "The Demon Prince",
+  },
+  {
+    id: "dushasana",
+    name: "Dushasana",
+    sanskritName: "दुःशासन",
+    image: dushasanaImg,
+    birthplace: "Hastinapura",
+    strengths: ["Warrior Skills", "Loyalty to Brother", "Fearlessness"],
+    weaknesses: ["Cruelty", "Arrogance", "Blind Obedience"],
+    parents: { father: "Dhritarashtra", mother: "Gandhari" },
+    description: "The second Kaurava who attempted to disrobe Draupadi in the royal court. His brutal death at Bhima's hands fulfilled the vow made that fateful day.",
+    title: "The Cruel Prince",
+  },
+  {
+    id: "shakuni",
+    name: "Shakuni",
+    sanskritName: "शकुनि",
+    image: shakuniImg,
+    birthplace: "Gandhara",
+    strengths: ["Dice Mastery", "Cunning", "Political Manipulation", "Patience"],
+    weaknesses: ["Physical Weakness", "Obsession with Revenge", "Deception"],
+    parents: { father: "King Subala", mother: "Queen of Gandhara" },
+    description: "The master manipulator whose rigged dice game led to the Pandavas' exile. His hatred for the Kuru dynasty stemmed from his family's tragic past.",
+    title: "The Mastermind",
+  },
+  {
+    id: "satyaki",
+    name: "Satyaki",
+    sanskritName: "सात्यकि",
+    image: satyakiImg,
+    birthplace: "Dwaraka",
+    strengths: ["Archery", "Loyalty", "Chariot Warfare", "Bravery"],
+    weaknesses: ["Hot-Tempered", "Rivalry with Kritavarma"],
+    parents: { father: "Satyaka", mother: "Yadava Princess" },
+    description: "The loyal Yadava warrior and student of Arjuna who stood by the Pandavas throughout the war. His valor was unmatched among Krishna's army.",
+    title: "The Loyal Yadava",
+  },
 ];
 
 const CharactersGrid = () => {
@@ -113,7 +243,7 @@ const CharactersGrid = () => {
             <div
               key={character.id}
               className="animate-scale-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              style={{ animationDelay: `${index * 0.05}s` }}
             >
               <CharacterCard character={character} />
             </div>
