@@ -1,4 +1,6 @@
+import { useState, useMemo } from "react";
 import CharacterCard, { Character } from "./CharacterCard";
+import { Search, X } from "lucide-react";
 
 // Import character images
 import arjunaImg from "@/assets/arjuna.png";
@@ -214,11 +216,61 @@ const characters: Character[] = [
 ];
 
 const CharactersGrid = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const filteredCharacters = useMemo(() => {
+    if (!searchQuery.trim()) return characters;
+    const query = searchQuery.toLowerCase();
+    return characters.filter(
+      (char) =>
+        char.name.toLowerCase().includes(query) ||
+        char.sanskritName.includes(searchQuery) ||
+        char.title.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+
   return (
     <div className="min-h-screen bg-background pattern-mandala">
       {/* Header */}
       <header className="relative py-12 md:py-16 text-center">
         <div className="absolute inset-0 bg-gradient-to-b from-maroon/10 to-transparent" />
+        
+        {/* Search Icon - Top Right */}
+        <div className="absolute top-4 right-4 z-20">
+          <div className="flex items-center gap-2">
+            {isSearchOpen && (
+              <div className="relative animate-fade-in">
+                <input
+                  type="text"
+                  placeholder="Search warriors..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-48 md:w-64 px-4 py-2 pr-8 bg-card/95 border border-gold/40 rounded-full font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/50 shadow-ancient"
+                  autoFocus
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            )}
+            <button
+              onClick={() => {
+                setIsSearchOpen(!isSearchOpen);
+                if (isSearchOpen) setSearchQuery("");
+              }}
+              className="p-3 bg-card/95 border border-gold/40 rounded-full text-gold hover:text-gold-dark hover:bg-card transition-all shadow-ancient hover:shadow-ancient-lg"
+            >
+              <Search size={20} />
+            </button>
+          </div>
+        </div>
+
         <div className="relative z-10">
           <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-wider animate-fade-in">
             Warriors of <span className="text-maroon">Kurukshetra</span>
@@ -236,19 +288,35 @@ const CharactersGrid = () => {
         </div>
       </header>
 
+      {/* Search Results Info */}
+      {searchQuery && (
+        <div className="container mx-auto px-4 mb-4">
+          <p className="font-body text-muted-foreground text-center">
+            Found <span className="text-gold font-semibold">{filteredCharacters.length}</span> warrior{filteredCharacters.length !== 1 ? 's' : ''} matching "<span className="text-foreground">{searchQuery}</span>"
+          </p>
+        </div>
+      )}
+
       {/* Characters Grid */}
       <main className="container mx-auto px-4 pb-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 md:gap-8">
-          {characters.map((character, index) => (
-            <div
-              key={character.id}
-              className="animate-scale-in"
-              style={{ animationDelay: `${index * 0.05}s` }}
-            >
-              <CharacterCard character={character} />
-            </div>
-          ))}
-        </div>
+        {filteredCharacters.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 md:gap-8">
+            {filteredCharacters.map((character, index) => (
+              <div
+                key={character.id}
+                className="animate-scale-in"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <CharacterCard character={character} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <p className="font-display text-2xl text-muted-foreground">No warriors found</p>
+            <p className="font-body text-gold mt-2">Try a different search term</p>
+          </div>
+        )}
       </main>
 
       {/* Footer */}
