@@ -51,7 +51,7 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
 
       {/* Modal Container */}
       <div
-        className="relative z-10 w-full max-w-md animate-scale-in"
+        className="relative z-10 w-full max-w-3xl animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -80,57 +80,65 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
               <div className="bg-card border-2 border-gold/30">
                 <div className="h-2 bg-gradient-gold" />
                 
-                {/* Hero Image */}
-                <div className="relative h-72 overflow-hidden">
-                  <img
-                    src={character.image}
-                    alt={character.name}
-                    className="w-full h-full object-cover object-top"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
-                  
-                  {/* Title badge */}
-                  <div className="absolute top-4 right-4 bg-maroon/90 px-4 py-1.5 rounded-full">
-                    <span className="font-display text-sm text-primary-foreground tracking-wider uppercase">
-                      {character.title}
-                    </span>
+                {/* Horizontal Layout - Image Left, Details Right */}
+                <div className="flex flex-col md:flex-row">
+                  {/* Full Character Image */}
+                  <div className="relative md:w-1/2 h-72 md:h-auto md:min-h-[420px] overflow-hidden">
+                    <img
+                      src={character.image}
+                      alt={character.name}
+                      className="w-full h-full object-cover object-top"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-card/50 hidden md:block" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent md:hidden" />
+                    
+                    {/* Title badge - mobile */}
+                    <div className="absolute top-4 right-4 md:hidden bg-maroon/90 px-4 py-1.5 rounded-full">
+                      <span className="font-display text-sm text-primary-foreground tracking-wider uppercase">
+                        {character.title}
+                      </span>
+                    </div>
                   </div>
-                  
-                  {/* Name overlay */}
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h2 className="font-display text-4xl font-bold text-foreground tracking-wide drop-shadow-lg">
+
+                  {/* Basic Info */}
+                  <div className="md:w-1/2 p-6 flex flex-col justify-center">
+                    {/* Title badge - desktop */}
+                    <div className="hidden md:inline-block self-start bg-maroon/90 px-4 py-1.5 rounded-full mb-3">
+                      <span className="font-display text-sm text-primary-foreground tracking-wider uppercase">
+                        {character.title}
+                      </span>
+                    </div>
+
+                    <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground tracking-wide">
                       {character.name}
                     </h2>
-                    <p className="font-body text-xl text-gold italic drop-shadow-md">
+                    <p className="font-body text-xl text-gold italic mb-6">
                       {character.sanskritName}
                     </p>
-                  </div>
-                </div>
 
-                {/* Basic Info */}
-                <div className="p-6 space-y-4">
-                  <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <span className="font-display text-sm text-bronze font-semibold uppercase tracking-wider">
-                        Birthplace
-                      </span>
-                      <p className="font-body text-foreground mt-1 text-lg">{character.birthplace}</p>
+                    <div className="space-y-4">
+                      <div>
+                        <span className="font-display text-sm text-bronze font-semibold uppercase tracking-wider">
+                          Birthplace
+                        </span>
+                        <p className="font-body text-foreground mt-1 text-lg">{character.birthplace}</p>
+                      </div>
+                      <div>
+                        <span className="font-display text-sm text-bronze font-semibold uppercase tracking-wider">
+                          Parents
+                        </span>
+                        <p className="font-body text-foreground mt-1 text-lg">
+                          {character.parents.mother} & {character.parents.father}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-display text-sm text-bronze font-semibold uppercase tracking-wider">
-                        Parents
-                      </span>
-                      <p className="font-body text-foreground mt-1 text-lg">
-                        {character.parents.mother} & {character.parents.father}
-                      </p>
-                    </div>
-                  </div>
 
-                  {/* Flip instruction */}
-                  <div className="text-center pt-4 border-t border-gold/30">
-                    <span className="font-body text-sm text-gold">
-                      ↻ Click card to see detailed legend
-                    </span>
+                    {/* Flip instruction */}
+                    <div className="text-center pt-6 mt-6 border-t border-gold/30">
+                      <span className="font-body text-sm text-gold">
+                        ↻ Click card to see detailed legend
+                      </span>
+                    </div>
                   </div>
                 </div>
 
