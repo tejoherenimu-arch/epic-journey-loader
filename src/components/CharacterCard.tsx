@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
+import { createPortal } from "react-dom";
 
 export interface Character {
   id: string;
@@ -23,25 +24,208 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const handleOpenModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleOpenModal = () => {
     setIsModalOpen(true);
     setIsFlipped(false);
+    document.body.style.overflow = "hidden";
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setIsFlipped(false);
+    document.body.style.overflow = "auto";
   };
 
-  const handleFlip = () => {
+  const handleFlip = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsFlipped(!isFlipped);
   };
+
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      onClick={handleCloseModal}
+    >
+      {/* Blurred Background */}
+      <div className="absolute inset-0 bg-background/85 backdrop-blur-lg" />
+
+      {/* Modal Container */}
+      <div
+        className="relative z-10 w-full max-w-md animate-scale-in"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={handleCloseModal}
+          className="absolute -top-12 right-0 z-20 p-2 text-gold hover:text-gold-dark transition-colors bg-card/80 rounded-full"
+        >
+          <X size={24} />
+        </button>
+
+        {/* Flip Card Container */}
+        <div className="perspective-1000">
+          <div
+            className={cn(
+              "relative w-full cursor-pointer transition-transform duration-700",
+              isFlipped ? "rotate-y-180" : ""
+            )}
+            style={{ transformStyle: "preserve-3d" }}
+            onClick={handleFlip}
+          >
+            {/* Front Side - Basic Details */}
+            <div
+              className="w-full rounded-xl overflow-hidden shadow-2xl"
+              style={{ backfaceVisibility: "hidden" }}
+            >
+              <div className="bg-card border-2 border-gold/30">
+                <div className="h-2 bg-gradient-gold" />
+                
+                {/* Hero Image */}
+                <div className="relative h-72 overflow-hidden">
+                  <img
+                    src={character.image}
+                    alt={character.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+                  
+                  {/* Title badge */}
+                  <div className="absolute top-4 right-4 bg-maroon/90 px-4 py-1.5 rounded-full">
+                    <span className="font-display text-sm text-primary-foreground tracking-wider uppercase">
+                      {character.title}
+                    </span>
+                  </div>
+                  
+                  {/* Name overlay */}
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h2 className="font-display text-4xl font-bold text-foreground tracking-wide drop-shadow-lg">
+                      {character.name}
+                    </h2>
+                    <p className="font-body text-xl text-gold italic drop-shadow-md">
+                      {character.sanskritName}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Basic Info */}
+                <div className="p-6 space-y-4">
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <span className="font-display text-sm text-bronze font-semibold uppercase tracking-wider">
+                        Birthplace
+                      </span>
+                      <p className="font-body text-foreground mt-1 text-lg">{character.birthplace}</p>
+                    </div>
+                    <div>
+                      <span className="font-display text-sm text-bronze font-semibold uppercase tracking-wider">
+                        Parents
+                      </span>
+                      <p className="font-body text-foreground mt-1 text-lg">
+                        {character.parents.mother} & {character.parents.father}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Flip instruction */}
+                  <div className="text-center pt-4 border-t border-gold/30">
+                    <span className="font-body text-sm text-gold">
+                      ↻ Click card to see detailed legend
+                    </span>
+                  </div>
+                </div>
+
+                <div className="h-2 bg-gradient-gold" />
+              </div>
+            </div>
+
+            {/* Back Side - Detailed Info */}
+            <div
+              className="w-full rounded-xl overflow-hidden shadow-2xl absolute top-0 left-0"
+              style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+            >
+              <div className="bg-card border-2 border-gold/30">
+                <div className="h-2 bg-gradient-gold" />
+
+                <div className="p-6 min-h-[480px]">
+                  {/* Header */}
+                  <div className="text-center mb-6">
+                    <h2 className="font-display text-3xl font-bold text-foreground tracking-wide">
+                      {character.name}
+                    </h2>
+                    <p className="font-body text-xl text-gold italic">
+                      {character.sanskritName}
+                    </p>
+                    <div className="mt-3 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
+                  </div>
+
+                  {/* Strengths */}
+                  <div className="mb-5">
+                    <h4 className="font-display text-sm font-semibold text-maroon mb-3 uppercase tracking-wider flex items-center gap-2">
+                      <span>⚔️</span> Strengths
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {character.strengths.map((strength, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1.5 bg-gold/20 text-gold-dark rounded-full text-sm font-body border border-gold/30"
+                        >
+                          {strength}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Weaknesses */}
+                  <div className="mb-5">
+                    <h4 className="font-display text-sm font-semibold text-maroon mb-3 uppercase tracking-wider flex items-center gap-2">
+                      <span>⚡</span> Weaknesses
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {character.weaknesses.map((weakness, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1.5 bg-maroon/15 text-maroon-light rounded-full text-sm font-body border border-maroon/20"
+                        >
+                          {weakness}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Legend/Description */}
+                  <div className="mb-5">
+                    <h4 className="font-display text-sm font-semibold text-maroon mb-3 uppercase tracking-wider flex items-center gap-2">
+                      <span>📜</span> Legend
+                    </h4>
+                    <p className="font-body text-muted-foreground leading-relaxed italic border-l-2 border-gold/50 pl-4 text-base">
+                      "{character.description}"
+                    </p>
+                  </div>
+
+                  {/* Flip back instruction */}
+                  <div className="text-center pt-4 border-t border-gold/30">
+                    <span className="font-body text-sm text-gold">
+                      ↻ Click to go back
+                    </span>
+                  </div>
+                </div>
+
+                <div className="h-2 bg-gradient-gold" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>
       {/* Card in Grid */}
-      <div className="group relative cursor-pointer transition-all duration-500 ease-out z-10">
+      <div
+        className="group relative cursor-pointer transition-all duration-500 ease-out"
+        onClick={handleOpenModal}
+      >
         <div className="card-ancient overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-ancient-lg">
           {/* Gold accent bar */}
           <div className="h-1 bg-gradient-gold" />
@@ -91,12 +275,9 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
 
             {/* Reveal button */}
             <div className="mt-4 text-center">
-              <button
-                onClick={handleOpenModal}
-                className="font-body text-xs text-gold hover:text-gold-dark transition-colors"
-              >
+              <span className="font-body text-xs text-gold hover:text-gold-dark transition-colors">
                 Click to reveal more
-              </button>
+              </span>
               <div className="mx-auto mt-1 w-6 h-6 text-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M6 9l6 6 6-6" />
@@ -110,176 +291,8 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
         </div>
       </div>
 
-      {/* Modal Overlay */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          onClick={handleCloseModal}
-        >
-          {/* Blurred Background */}
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-md animate-fade-in" />
-
-          {/* Flip Card Container */}
-          <div
-            className="relative w-full max-w-lg perspective-1000 animate-scale-in"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              onClick={handleCloseModal}
-              className="absolute -top-12 right-0 z-10 p-2 text-gold hover:text-gold-dark transition-colors"
-            >
-              <X size={28} />
-            </button>
-
-            {/* Flip Card */}
-            <div
-              className={cn(
-                "relative w-full transition-transform duration-700 transform-style-3d cursor-pointer",
-                isFlipped ? "rotate-y-180" : ""
-              )}
-              onClick={handleFlip}
-              style={{ transformStyle: "preserve-3d" }}
-            >
-              {/* Front Side - Basic Details */}
-              <div
-                className="card-ancient w-full backface-hidden"
-                style={{ backfaceVisibility: "hidden" }}
-              >
-                <div className="h-2 bg-gradient-gold" />
-                
-                {/* Hero Image */}
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={character.image}
-                    alt={character.name}
-                    className="w-full h-full object-cover object-top"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
-                  
-                  {/* Title overlay */}
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="bg-maroon/90 px-4 py-1 rounded-full inline-block mb-2">
-                      <span className="font-display text-sm text-primary-foreground tracking-wider uppercase">
-                        {character.title}
-                      </span>
-                    </div>
-                    <h2 className="font-display text-3xl font-bold text-foreground tracking-wide">
-                      {character.name}
-                    </h2>
-                    <p className="font-body text-xl text-gold italic">
-                      {character.sanskritName}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Basic Info */}
-                <div className="p-6 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <span className="font-display text-sm text-bronze font-semibold uppercase tracking-wider">
-                        Birthplace
-                      </span>
-                      <p className="font-body text-foreground mt-1">{character.birthplace}</p>
-                    </div>
-                    <div>
-                      <span className="font-display text-sm text-bronze font-semibold uppercase tracking-wider">
-                        Parents
-                      </span>
-                      <p className="font-body text-foreground mt-1">
-                        {character.parents.mother} & {character.parents.father}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Flip instruction */}
-                  <div className="text-center pt-4 border-t border-gold/20">
-                    <span className="font-body text-sm text-gold animate-pulse">
-                      ↻ Click to see detailed legend
-                    </span>
-                  </div>
-                </div>
-
-                <div className="h-2 bg-gradient-gold" />
-              </div>
-
-              {/* Back Side - Detailed Info */}
-              <div
-                className="card-ancient w-full absolute top-0 left-0 backface-hidden rotate-y-180"
-                style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-              >
-                <div className="h-2 bg-gradient-gold" />
-
-                <div className="p-6">
-                  {/* Header */}
-                  <div className="text-center mb-6">
-                    <h2 className="font-display text-2xl font-bold text-foreground tracking-wide">
-                      {character.name}
-                    </h2>
-                    <p className="font-body text-lg text-gold italic">
-                      {character.sanskritName}
-                    </p>
-                    <div className="mt-2 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  </div>
-
-                  {/* Strengths */}
-                  <div className="mb-4">
-                    <h4 className="font-display text-sm font-semibold text-maroon mb-2 uppercase tracking-wider">
-                      ⚔️ Strengths
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {character.strengths.map((strength, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-gold/20 text-gold-dark rounded-full text-sm font-body"
-                        >
-                          {strength}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Weaknesses */}
-                  <div className="mb-4">
-                    <h4 className="font-display text-sm font-semibold text-maroon mb-2 uppercase tracking-wider">
-                      ⚡ Weaknesses
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {character.weaknesses.map((weakness, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-maroon/15 text-maroon-light rounded-full text-sm font-body"
-                        >
-                          {weakness}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Legend/Description */}
-                  <div className="mb-4">
-                    <h4 className="font-display text-sm font-semibold text-maroon mb-2 uppercase tracking-wider">
-                      📜 Legend
-                    </h4>
-                    <p className="font-body text-muted-foreground leading-relaxed italic border-l-2 border-gold/50 pl-4">
-                      "{character.description}"
-                    </p>
-                  </div>
-
-                  {/* Flip back instruction */}
-                  <div className="text-center pt-4 border-t border-gold/20">
-                    <span className="font-body text-sm text-gold animate-pulse">
-                      ↻ Click to go back
-                    </span>
-                  </div>
-                </div>
-
-                <div className="h-2 bg-gradient-gold" />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Render Modal in Portal */}
+      {isModalOpen && createPortal(modalContent, document.body)}
     </>
   );
 };
